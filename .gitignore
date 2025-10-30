@@ -1,2 +1,3 @@
 application-prod.yml
 application-local.yml
+.gitignore
