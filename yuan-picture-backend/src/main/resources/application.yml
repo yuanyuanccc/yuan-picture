@@ -3,6 +3,11 @@ server:
   servlet:
     context-path: /api
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  profiles:
+    active: local
   application:
     name: yu-picture-backend
     # 数据库配置

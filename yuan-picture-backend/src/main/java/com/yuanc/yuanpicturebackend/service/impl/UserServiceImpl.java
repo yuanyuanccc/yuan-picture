@@ -189,6 +189,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
+    public boolean isAdmin(User user) {
+        return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
+    }
+
+
+    @Override
     public String getEncryptPassword(String userPassword) {
         // 盐值，混淆密码
         final String SALT = "yupi";
