@@ -68,6 +68,16 @@ const originItems = [
     title: '用户管理',
   },
   {
+    key: '/add_picture',
+    label: '创建图片',
+    title: '创建图片',
+  },
+  {
+    key: '/admin/pictureManage',
+    label: '图片管理',
+    title: '图片管理',
+  },
+  {
     key: 'others',
     label: h('a', { href: 'https://github.com/yuanyuanccc', target: '_blank' }, '联系作者'),
     title: '联系作者',

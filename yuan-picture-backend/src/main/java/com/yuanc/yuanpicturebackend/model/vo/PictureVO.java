@@ -111,7 +111,7 @@ public class PictureVO implements Serializable {
     /**  
      * 对象转封装类  
      */  
-    public static PictureVO objToVo(Picture picture) {  
+    public static PictureVO objToVo(Picture picture) {
         if (picture == null) {  
             return null;  
         }  
