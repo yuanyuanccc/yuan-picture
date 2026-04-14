@@ -175,7 +175,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         return PictureVO.objToVo(picture);
     }
 
-
     @Override
     public void fillReviewParams(Picture picture, User loginUser) {
         if (userService.isAdmin(loginUser)) {

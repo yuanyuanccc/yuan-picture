@@ -22,3 +22,4 @@ export function downloadImage(url?: string, fileName?: string) {
   }
   saveAs(url, fileName)
 }
+
