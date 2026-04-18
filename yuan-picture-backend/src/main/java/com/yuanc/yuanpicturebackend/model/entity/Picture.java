@@ -1,9 +1,8 @@
 package com.yuanc.yuanpicturebackend.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="picture")
 @Data
-public class Picture {
+public class Picture implements Serializable {
     /**
      * id
      */
@@ -24,6 +23,11 @@ public class Picture {
      * 图片 url
      */
     private String url;
+
+    /**
+     * 缩略图 url
+     */
+    private String thumbnailUrl;
 
     /**
      * 图片名称
@@ -76,6 +80,26 @@ public class Picture {
     private Long userId;
 
     /**
+     * 审核状态：0-待审核; 1-通过; 2-拒绝
+     */
+    private Integer reviewStatus;
+
+    /**
+     * 审核信息
+     */
+    private String reviewMessage;
+
+    /**
+     * 审核人 ID
+     */
+    private Long reviewerId;
+
+    /**
+     * 审核时间
+     */
+    private Date reviewTime;
+
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -91,29 +115,11 @@ public class Picture {
     private Date updateTime;
 
     /**
-     * 状态：0-待审核; 1-通过; 2-拒绝
-     */
-    private Integer reviewStatus;
-
-    /**
-     * 审核信息
-     */
-    private String reviewMessage;
-
-    /**
-     * 审核人 id
-     */
-    private Long reviewerId;
-
-    /**
-     * 审核时间
-     */
-    private Date reviewTime;
-
-
-    /**
      * 是否删除
      */
     @TableLogic
     private Integer isDelete;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

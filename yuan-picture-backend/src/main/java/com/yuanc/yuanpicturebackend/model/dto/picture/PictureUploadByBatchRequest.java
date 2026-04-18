@@ -8,8 +8,14 @@ public class PictureUploadByBatchRequest {
     /**  
      * 搜索词  
      */  
-    private String searchText;  
-  
+    private String searchText;
+
+
+    /**
+     * 图片名称前缀
+     */
+    private String namePrefix;
+
     /**  
      * 抓取数量  
      */  

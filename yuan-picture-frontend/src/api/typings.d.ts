@@ -154,6 +154,7 @@ declare namespace API {
     reviewTime?: string
     reviewerId?: number
     tags?: string
+    thumbnailUrl?: string
     updateTime?: string
     url?: string
     userId?: number
@@ -211,6 +212,7 @@ declare namespace API {
 
   type PictureUploadByBatchRequest = {
     count?: number
+    namePrefix?: string
     searchText?: string
   }
 
@@ -233,6 +235,7 @@ declare namespace API {
     picSize?: number
     picWidth?: number
     tags?: string[]
+    thumbnailUrl?: string
     updateTime?: string
     url?: string
     user?: UserVO

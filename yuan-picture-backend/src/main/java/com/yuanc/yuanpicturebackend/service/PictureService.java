@@ -10,6 +10,7 @@ import com.yuanc.yuanpicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yuanc.yuanpicturebackend.model.entity.User;
 import com.yuanc.yuanpicturebackend.model.vo.PictureVO;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,4 +63,7 @@ public interface PictureService extends IService<Picture> {
     void validPicture(Picture picture);
 
     PictureVO getPictureVO(Picture picture, HttpServletRequest request);
+
+    @Async
+    void clearPictureFile(Picture oldPicture);
 }

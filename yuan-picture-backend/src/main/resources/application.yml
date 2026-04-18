@@ -2,12 +2,23 @@ server:
   port: 8123
   servlet:
     context-path: /api
+    session:
+      cookie:
+        max-age: 2592000
 spring:
   application:
     name: yu-picture-backend
+  session:
+    store-type: redis
+    timeout: 2592000
   servlet:
     multipart:
       max-file-size: 10MB
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    timeout: 5000
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
