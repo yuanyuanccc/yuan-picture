@@ -2,10 +2,7 @@ package com.yuanc.yuanpicturebackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yuanc.yuanpicturebackend.model.dto.picture.PictureQueryRequest;
-import com.yuanc.yuanpicturebackend.model.dto.picture.PictureReviewRequest;
-import com.yuanc.yuanpicturebackend.model.dto.picture.PictureUploadByBatchRequest;
-import com.yuanc.yuanpicturebackend.model.dto.picture.PictureUploadRequest;
+import com.yuanc.yuanpicturebackend.model.dto.picture.*;
 import com.yuanc.yuanpicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yuanc.yuanpicturebackend.model.entity.User;
@@ -23,9 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 public interface PictureService extends IService<Picture> {
 
     /**
+     * 校验图片
+     *
+     * @param picture
+     */
+    void validPicture(Picture picture);
+
+    /**
      * 上传图片
      *
-     * @param inputSource 文件输入源
+     * @param inputSource          文件输入源
      * @param pictureUploadRequest
      * @param loginUser
      * @return
@@ -34,23 +38,32 @@ public interface PictureService extends IService<Picture> {
                             PictureUploadRequest pictureUploadRequest,
                             User loginUser);
 
-    void fillReviewParams(Picture picture, User loginUser);
+    /**
+     * 获取图片包装类（单条）
+     *
+     * @param picture
+     * @param request
+     * @return
+     */
+    PictureVO getPictureVO(Picture picture, HttpServletRequest request);
 
-    QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
-
+    /**
+     * 获取图片包装类（分页）
+     *
+     * @param picturePage
+     * @param request
+     * @return
+     */
     Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
 
     /**
-     * 批量抓取和创建图片
+     * 获取查询对象
      *
-     * @param pictureUploadByBatchRequest
-     * @param loginUser
-     * @return 成功创建的图片数
+     * @param pictureQueryRequest
+     * @return
      */
-    Integer uploadPictureByBatch(
-            PictureUploadByBatchRequest pictureUploadByBatchRequest,
-            User loginUser
-    );
+    QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+
 
     /**
      * 图片审核
@@ -60,10 +73,52 @@ public interface PictureService extends IService<Picture> {
      */
     void doPictureReview(PictureReviewRequest pictureReviewRequest, User loginUser);
 
-    void validPicture(Picture picture);
+    /**
+     * 填充审核参数
+     *
+     * @param picture
+     * @param loginUser
+     */
+    void fillReviewParams(Picture picture, User loginUser);
 
-    PictureVO getPictureVO(Picture picture, HttpServletRequest request);
+    /**
+     * 批量抓取和创建图片
+     *
+     * @param pictureUploadByBatchRequest
+     * @param loginUser
+     * @return 成功创建的图片数
+     */
+    Integer uploadPictureByBatch(PictureUploadByBatchRequest pictureUploadByBatchRequest,
+                                 User loginUser);
 
-    @Async
+    /**
+     * 清理图片文件
+     *
+     * @param oldPicture
+     */
     void clearPictureFile(Picture oldPicture);
+
+    /**
+     * 删除图片
+     *
+     * @param pictureId
+     * @param loginUser
+     */
+    void deletePicture(long pictureId, User loginUser);
+
+    /**
+     * 编辑图片
+     *
+     * @param pictureEditRequest
+     * @param loginUser
+     */
+    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
+
+    /**
+     * 校验空间图片的权限
+     *
+     * @param loginUser
+     * @param picture
+     */
+    void checkPictureAuth(User loginUser, Picture picture);
 }
