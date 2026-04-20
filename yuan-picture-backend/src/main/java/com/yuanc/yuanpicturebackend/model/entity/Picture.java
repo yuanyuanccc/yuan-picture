@@ -1,10 +1,10 @@
 package com.yuanc.yuanpicturebackend.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 图片
@@ -28,11 +28,6 @@ public class Picture implements Serializable {
      * 缩略图 url
      */
     private String thumbnailUrl;
-
-    /**
-     * 空间 id
-     */
-    private Long spaceId;
 
     /**
      * 图片名称
@@ -80,9 +75,19 @@ public class Picture implements Serializable {
     private String picFormat;
 
     /**
+     * 图片主色调
+     */
+    private String picColor;
+
+    /**
      * 创建用户 id
      */
     private Long userId;
+
+    /**
+     * 空间 id
+     */
+    private Long spaceId;
 
     /**
      * 审核状态：0-待审核; 1-通过; 2-拒绝
