@@ -1,4 +1,4 @@
-# Yuan-Picture 云图
+# CloudGraph 云图
 
 > AI 图片管理分享平台 | AI-Powered Image Management & Sharing Platform
 
