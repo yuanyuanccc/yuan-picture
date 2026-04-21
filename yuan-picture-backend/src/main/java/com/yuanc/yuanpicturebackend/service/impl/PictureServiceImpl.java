@@ -8,6 +8,10 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import com.yuanc.yuanpicturebackend.api.aliyun.AliYunAiApi;
+import com.yuanc.yuanpicturebackend.api.aliyun.model.CreateOutPaintingTaskRequest;
+import com.yuanc.yuanpicturebackend.api.aliyun.model.CreateOutPaintingTaskResponse;
 import com.yuanc.yuanpicturebackend.exception.BusinessException;
 import com.yuanc.yuanpicturebackend.exception.ErrorCode;
 import com.yuanc.yuanpicturebackend.exception.ThrowUtils;
@@ -16,6 +20,7 @@ import com.yuanc.yuanpicturebackend.manager.FileManager;
 import com.yuanc.yuanpicturebackend.manager.upload.FilePictureUpload;
 import com.yuanc.yuanpicturebackend.manager.upload.PictureUploadTemplate;
 import com.yuanc.yuanpicturebackend.manager.upload.UrlPictureUpload;
+import com.yuanc.yuanpicturebackend.mapper.PictureMapper;
 import com.yuanc.yuanpicturebackend.model.dto.file.UploadPictureResult;
 import com.yuanc.yuanpicturebackend.model.dto.picture.*;
 import com.yuanc.yuanpicturebackend.model.entity.Picture;
@@ -25,12 +30,12 @@ import com.yuanc.yuanpicturebackend.model.enums.PictureReviewStatusEnum;
 import com.yuanc.yuanpicturebackend.model.vo.PictureVO;
 import com.yuanc.yuanpicturebackend.model.vo.UserVO;
 import com.yuanc.yuanpicturebackend.service.PictureService;
-import com.yuanc.yuanpicturebackend.mapper.PictureMapper;
 import com.yuanc.yuanpicturebackend.service.SpaceService;
 import com.yuanc.yuanpicturebackend.service.UserService;
 import com.yuanc.yuanpicturebackend.utils.ColorSimilarUtils;
 import com.yuanc.yuanpicturebackend.utils.ColorTransformUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,10 +55,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* @author Yuanc
-* @description 针对表【picture(图片)】的数据库操作Service实现
-* @createDate 2026-04-13 20:19:14
-*/
+ * @author yuanc
+ * @description 针对表【picture(图片)】的数据库操作Service实现
+ * @createDate
+ */
 @Slf4j
 @Service
 public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
@@ -79,6 +84,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    @Resource
+    private AliYunAiApi aliYunAiApi;
 
     @Override
     public void validPicture(Picture picture) {
@@ -606,6 +614,24 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 5. 操作数据库进行批量更新
         boolean result = this.updateBatchById(pictureList);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "批量编辑失败");
+    }
+
+    @Override
+    public CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser) {
+        // 获取图片信息
+        Long pictureId = createPictureOutPaintingTaskRequest.getPictureId();
+        Picture picture = Optional.ofNullable(this.getById(pictureId))
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR, "图片不存在"));
+        // 校验权限
+        checkPictureAuth(loginUser, picture);
+        // 创建扩图任务
+        CreateOutPaintingTaskRequest createOutPaintingTaskRequest = new CreateOutPaintingTaskRequest();
+        CreateOutPaintingTaskRequest.Input input = new CreateOutPaintingTaskRequest.Input();
+        input.setImageUrl(picture.getUrl());
+        createOutPaintingTaskRequest.setInput(input);
+        createOutPaintingTaskRequest.setParameters(createPictureOutPaintingTaskRequest.getParameters());
+        // 创建任务
+        return aliYunAiApi.createOutPaintingTask(createOutPaintingTaskRequest);
     }
 
     /**
