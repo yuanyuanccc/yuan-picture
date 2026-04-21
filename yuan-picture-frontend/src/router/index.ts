@@ -14,7 +14,7 @@ import SpaceDetailPage from "@/pages/SpaceDetailPage.vue";
 import SearchPicturePage from "@/pages/SearchPicturePage.vue";
 import SpaceAnalyzePage from "@/pages/SpaceAnalyzePage.vue";
 
-// @author 程序员鱼皮 <a href="https://www.codefather.cn">编程导航原创项目</a>
+// @author yuanc
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
